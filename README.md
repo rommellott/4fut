@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # fourfut
 This project was generated with Generator-M-Ionic v1.8.0. For more info visit the [repository](https://github.com/mwaylabs/generator-m-ionic) or check out the README below.
 
@@ -130,3 +131,6 @@ Start by reading our:
 
 ## License
 Code licensed under MIT. Docs under Apache 2. PhoneGap is a trademark of Adobe.
+=======
+# 4fut
+>>>>>>> d6fbf4dae779ae195cee0db0c394b5f71303d31f
