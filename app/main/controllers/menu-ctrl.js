@@ -1,7 +1,15 @@
+/*global firebase*/
 'use strict';
 angular.module('main')
-.controller('MenuCtrl', function ($log) {
+  .controller('MenuCtrl', function ($state) {
+    var vm = this;
 
-  $log.log('Hello from your Controller: MenuCtrl in module main:. This is your controller:', this);
+    vm.logOut = function () {
+      firebase.auth().signOut().then(function () {
+        $state.go('login');
+      }, function (error) {
+        console.log(error);
+      });
+    };
 
-});
+  });

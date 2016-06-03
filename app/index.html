@@ -25,10 +25,15 @@
   <link rel="stylesheet" href="main/styles/main.css">
   <!-- endinject -->
   <!-- endbuild -->
+  
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/0.4.0/firebase-ui-auth.css" />
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/0.4.0/firebase-ui-auth.js"></script>
+
 </head>
 
 <body ng-app="fourfut">
-
   <!-- the nav bar will be updated as we navigate between views -->
   <!-- <ion-nav-bar> can be removed when using sidemenu (contained in menu.html) -->
   <ion-nav-bar class="bar-royal">
@@ -54,29 +59,23 @@
   <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
   <script src="bower_components/localforage/dist/localforage.js"></script>
   <script src="bower_components/ionic-platform-web-client/dist/ionic.io.bundle.min.js"></script>
+  <script src="bower_components/firebase/firebase.js"></script>
+  <script src="bower_components/angularfire/dist/angularfire.js"></script>
+  <script src="bower_components/geofire/dist/geofire.js"></script>
+  <script src="bower_components/AngularGeoFire/src/angularGeoFire.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
-
-  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-  <script>
-    // Initialize Firebase
-  var config = {
-      apiKey: "AIzaSyBwDt94GlDNtX1wPKOrTMpNdZKiRSp174c",
-      authDomain: "project-6978015457201844416.firebaseapp.com",
-      databaseURL: "https://project-6978015457201844416.firebaseio.com",
-      storageBucket: "project-6978015457201844416.appspot.com",
-    };
-  firebase.initializeApp(config);
-
-  </script>
-
+  
   <!-- build:js scripts/app.js -->
   <!-- inject:js -->
   <script src="main/main.js"></script>
   <script src="main/services/main-serv.js"></script>
+  <script src="main/services/arenas-serv.js"></script>
   <script src="main/controllers/user-ctrl.js"></script>
   <script src="main/controllers/menu-ctrl.js"></script>
+  <script src="main/controllers/login-ctrl.js"></script>
   <script src="main/controllers/debug-ctrl.js"></script>
+  <script src="main/controllers/arenas-ctrl.js"></script>
   <script src="main/constants/config-const.js"></script>
   <script src="app.js"></script>
   <!-- endinject -->

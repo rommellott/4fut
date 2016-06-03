@@ -1,19 +1,20 @@
+/*global firebase*/
+/*eslint no-undef: "error"*/
+
 'use strict';
+
+// Initialize Firebase
+var config = {
+  apiKey: 'AIzaSyBwDt94GlDNtX1wPKOrTMpNdZKiRSp174c',
+  authDomain: 'project-6978015457201844416.firebaseapp.com',
+  databaseURL: 'https://project-6978015457201844416.firebaseio.com',
+  storageBucket: 'project-6978015457201844416.appspot.com',
+};
+
+// Initialize the FirebaseUI Widget using Firebase.
+firebase.initializeApp(config);
+
 angular.module('main')
-.constant('Config', {
-
-  // gulp environment: injects environment vars
-  ENV: {
-    /*inject-env*/
-    'SERVER_URL': 'https://DEVSERVER/api',
-    'SOME_OTHER_URL': '/proxy'
-    /*endinject*/
-  },
-
-  // gulp build-vars: injects build vars
-  BUILD: {
-    /*inject-build*/
-    /*endinject*/
-  }
-
-});
+  .factory('Ref', [function () {
+    return firebase.database().ref();
+  }]);

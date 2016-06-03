@@ -1,4 +1,4 @@
-/*global Ionic cordova StatusBar*/
+/*global Ionic cordova StatusBar firebase*/
 /*eslint no-undef: "error"*/
 
 'use strict';
@@ -6,71 +6,121 @@ angular.module('main', [
   'ionic',
   'ngCordova',
   'ui.router',
-  'ionic.service.analytics'
+  'ionic.service.analytics',
+  'firebase',
+  'angularGeoFire'
   // TODO: load other modules selected during generation
 ])
 
-.run(function ($ionicPlatform) {
-  $ionicPlatform.ready(function () {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+  .run(function ($ionicPlatform) {
+    $ionicPlatform.ready(function () {
+      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      // for form inputs)
+      if (window.cordova && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
 
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
+      }
+      if (window.StatusBar) {
+        // org.apache.cordova.statusbar required
+        StatusBar.styleDefault();
+      }
 
-    var deploy = new Ionic.Deploy();
-    deploy.watch().then(
-      function noop () {
-      },
-      function noop () {
-      },
-      function hasUpdate (hasUpdate) {
-        console.log('Has Update ', hasUpdate);
-        if (hasUpdate) {
-          console.log('Calling ionicDeploy.update()');
-          deploy.update().then(function (deployResult) {
-            console.log(deployResult);
-            // deployResult will be true when successfull and
-            // false otherwise
-          }, function (deployUpdateError) {
-            // fired if we're unable to check for updates or if any
-            // errors have occured.
-            console.log('Ionic Deploy: Update error! ', deployUpdateError);
-          }, function (deployProgress) {
-            // this is a progress callback, so it will be called a lot
-            // deployProgress will be an Integer representing the current
-            // completion percentage.
-            console.log('Ionic Deploy: Progress... ', deployProgress);
-          });
+      var deploy = new Ionic.Deploy();
+      deploy.watch().then(
+        function noop() {
+        },
+        function noop() {
+        },
+        function hasUpdate(hasUpdate) {
+          console.log('Has Update ', hasUpdate);
+          if (hasUpdate) {
+            console.log('Calling ionicDeploy.update()');
+            deploy.update().then(function (deployResult) {
+              console.log(deployResult);
+              // deployResult will be true when successfull and
+              // false otherwise
+            }, function (deployUpdateError) {
+              // fired if we're unable to check for updates or if any
+              // errors have occured.
+              console.log('Ionic Deploy: Update error! ', deployUpdateError);
+            }, function (deployProgress) {
+              // this is a progress callback, so it will be called a lot
+              // deployProgress will be an Integer representing the current
+              // completion percentage.
+              console.log('Ionic Deploy: Progress... ', deployProgress);
+            });
+          }
+        });
+    });
+  })
+
+  .run(function ($ionicPlatform, $ionicAnalytics) {
+    $ionicPlatform.ready(function () {
+      $ionicAnalytics.register();
+    });
+  })
+
+  .run(function ($rootScope, $state) {
+    // watch for login status changes and redirect if appropriate
+    $rootScope.$on('$stateChangeStart', function (evt, toState) {
+      var auth = firebase.auth();
+      auth.onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in.
+          if (toState.name === 'login') {
+            $state.go('main.arenas');
+          }
+        } else if (toState.name !== 'login'){
+          // User is signed out.
+          $state.go('login');
         }
+      }, function (error) {
+        console.log(error);
       });
-  });
-})
+    });
+  })
 
-.run(function ($ionicPlatform, $ionicAnalytics) {
-  $ionicPlatform.ready(function () {
-    $ionicAnalytics.register();
-  });
-})
+  .config(function ($stateProvider, $urlRouterProvider) {
 
-.config(function ($stateProvider, $urlRouterProvider) {
-
-  // ROUTING with ui.router
-  $urlRouterProvider.otherwise('/main/list');
-  $stateProvider
-    // this state is placed in the <ion-nav-view> in the index.html
-    .state('main', {
-      url: '/main',
-      abstract: true,
-      templateUrl: 'main/templates/menu.html',
-      controller: 'MenuCtrl as menu'
-    })
+    // ROUTING with ui.router
+    $urlRouterProvider.otherwise('/login');
+    $stateProvider
+      // this state is placed in the <ion-nav-view> in the index.html
+      .state('login', {
+        url: '/login',
+        templateUrl: 'main/templates/login.html',
+        controller: 'LoginCtrl'
+      })
+      .state('main', {
+        url: '/main',
+        abstract: true,
+        templateUrl: 'main/templates/menu.html',
+        controller: 'MenuCtrl as menu'
+      })
+      .state('main.arenas', {
+        url: '/arenas',
+        views: {
+          'pageContent': {
+            templateUrl: 'main/templates/arenas-list.html',
+            controller: 'ArenasCtrl as vm',
+            resolve: {
+              arenas: function (ArenasService) {
+                return ArenasService.getArenas().$loaded();
+              }
+            }
+          }
+        }
+      })
+      .state('main.arenasDetail', {
+        url: '/arenas/detail',
+        views: {
+          'pageContent': {
+            templateUrl: 'main/templates/arenas-detail.html',
+            controller: 'ArenasCtrl as vm'
+          }
+        }
+      })
       .state('main.list', {
         url: '/list',
         views: {
@@ -98,4 +148,5 @@ angular.module('main', [
           }
         }
       });
-});
+  });
+
