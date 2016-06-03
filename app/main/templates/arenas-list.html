@@ -1,18 +1,38 @@
-<ion-view view-title="List">
-  <ion-content>
+<ion-view view-title="ARENAS" class="programacao-view">
+  <ion-nav-buttons side="right">
+  </ion-nav-buttons>
+  <ion-tabs class="tabs-light">
 
-    <!-- content goes here -->
-    <ion-list>
-      <ion-item 
-        ng-repeat="arena in vm.arenas | orderBy:'distance'"
-        class="item-remove-animate item-avatar item-icon-right"
-        type="item-text-wrap"
-        ui-sref="main.listDetail">
-        <img ng-src="{{arena.fotoPerfil}}">
-        <h2>{{arena.g}}</h2>
-        <p>{{arena.distance}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+    <ion-tab title="LISTA">
+      <ion-view>
+        <ion-content class="padding">
+
+          <ion-list>
+            <ion-item ng-repeat="arena in actrl.arenas | orderBy:'distance'" class="item-remove-animate item-avatar item-icon-right"
+              type="item-text-wrap" ui-sref="main.arenasDetail({id: arena.id})">
+              <img ng-src="{{arena.fotoPerfil}}">
+              <h2>{{arena.g}}</h2>
+              <p>{{arena.distance}}</p>
+              <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+          </ion-list>
+
+        </ion-content>
+      </ion-view>
+    </ion-tab>
+
+    <ion-tab title="MAPA">
+      <ion-view>
+        <ion-content>
+          <ui-gmap-google-map center='actrl.map.center' zoom='actrl.map.zoom'>
+            <ui-gmap-marker ng-repeat="arena in actrl.arenas"
+              idKey='arena.id' 
+              coords='arena.l'>
+            </ui-gmap-marker>
+          </ui-gmap-google-map>
+        </ion-content>
+      </ion-view>
+    </ion-tab>
+
+  </ion-tabs>
 </ion-view>

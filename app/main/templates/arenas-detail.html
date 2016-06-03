@@ -1,16 +1,9 @@
 <ion-view view-title="main module">
   <!-- do you want padding? -->
   <ion-content class="padding">
-
-    <!-- content goes here -->
-    <ion-list>
-      <ion-item class="item item-divider">
-        This is your arenas-detail template!
-      </ion-item>
-      <ion-item class="item item-icon">
-        Yeiiii!
-      </ion-item>
-    </ion-list>
-
+    <button ui-sref="main.reserva({id: adctrl.arena.$id})" class="button button-full button-positive">
+      RESERVAR
+    </button>
+    <pre>{{adctrl.arena | json}}</pre>
   </ion-content>
 </ion-view>

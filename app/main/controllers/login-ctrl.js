@@ -20,7 +20,7 @@ angular.module('main')
       // Terms of service url.
       'tosUrl': '<your-tos-url>',
       'callbacks': {
-        'signInSuccess': function (currentUser, credential, redirectUrl) {
+        'signInSuccess': function () {
           $state.go('login');
           // Do something.
           // Return type determines whether we continue the redirect automatically

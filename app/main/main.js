@@ -8,7 +8,7 @@ angular.module('main', [
   'ui.router',
   'ionic.service.analytics',
   'firebase',
-  'angularGeoFire'
+  'uiGmapgoogle-maps'
   // TODO: load other modules selected during generation
 ])
 
@@ -28,11 +28,11 @@ angular.module('main', [
 
       var deploy = new Ionic.Deploy();
       deploy.watch().then(
-        function noop() {
+        function noop () {
         },
-        function noop() {
+        function noop () {
         },
-        function hasUpdate(hasUpdate) {
+        function hasUpdate (hasUpdate) {
           console.log('Has Update ', hasUpdate);
           if (hasUpdate) {
             console.log('Calling ionicDeploy.update()');
@@ -71,7 +71,7 @@ angular.module('main', [
           if (toState.name === 'login') {
             $state.go('main.arenas');
           }
-        } else if (toState.name !== 'login'){
+        } else if (toState.name !== 'login') {
           // User is signed out.
           $state.go('login');
         }
@@ -103,21 +103,35 @@ angular.module('main', [
         views: {
           'pageContent': {
             templateUrl: 'main/templates/arenas-list.html',
-            controller: 'ArenasCtrl as vm',
-            resolve: {
-              arenas: function (ArenasService) {
-                return ArenasService.getArenas().$loaded();
-              }
-            }
+            controller: 'ArenasCtrl as actrl'
           }
         }
       })
       .state('main.arenasDetail', {
-        url: '/arenas/detail',
+        url: '/arenas/:id',
         views: {
           'pageContent': {
             templateUrl: 'main/templates/arenas-detail.html',
-            controller: 'ArenasCtrl as vm'
+            controller: 'Arena-detailsCtrl as adctrl',
+            resolve: {
+              arena: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
+                return ArenasService.getArena($stateParams.id).$loaded();
+              }]
+            }
+          }
+        }
+      })
+      .state('main.reserva', {
+        url: '/arenas/:id/reserva',
+        views: {
+          'pageContent': {
+            templateUrl: 'main/templates/reserva.html',
+            controller: 'ReservaCtrl as rctrl',
+            resolve: {
+              quadras: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
+                return ArenasService.getQuadrasArena($stateParams.id).$loaded();
+              }]
+            }
           }
         }
       })
@@ -148,5 +162,18 @@ angular.module('main', [
           }
         }
       });
-  });
+  })
 
+  .config(function (uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+      //    key: 'your api key',
+      v: '3.20', //defaults to latest 3.X anyhow
+      libraries: 'weather,geometry,visualization'
+    });
+  })
+
+  .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApiProviders) {
+    GoogleMapApiProviders.configure({
+      brazil: true
+    });
+  }]);

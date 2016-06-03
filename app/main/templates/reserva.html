@@ -1,0 +1,19 @@
+<ion-view view-title="main module">
+  <!-- do you want padding? -->
+  <ion-content class="padding">
+
+    <!-- content goes here -->
+    <ion-list>
+      <ul>
+        <li ng-repeat="quadra in rctrl.quadras">{{quadra.nome}}</li>
+      </ul>
+
+      <h1>Reservas</h1>
+      <ul>
+        <li ng-repeat="reserva in rctrl.reservas">{{reserva.start}}</li>
+      </ul>
+
+    </ion-list>
+
+  </ion-content>
+</ion-view>
