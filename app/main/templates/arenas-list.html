@@ -11,7 +11,7 @@
             <ion-item ng-repeat="arena in actrl.arenas | orderBy:'distance'" class="item-remove-animate item-avatar item-icon-right"
               type="item-text-wrap" ui-sref="main.arenasDetail({id: arena.id})">
               <img ng-src="{{arena.fotoPerfil}}">
-              <h2>{{arena.g}}</h2>
+              <h2>{{arena.nome}}</h2>
               <p>{{arena.distance}}</p>
               <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>

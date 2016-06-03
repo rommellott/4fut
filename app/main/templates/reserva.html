@@ -4,15 +4,17 @@
 
     <!-- content goes here -->
     <ion-list>
+      <h1>Horários</h1>
       <ul>
-        <li ng-repeat="quadra in rctrl.quadras">{{quadra.nome}}</li>
+        <li ng-repeat="horario in rctrl.horariosPorQuadra">
+          {{horario.quadra.nome}}
+          <ul>
+            <li ng-repeat="h in horario.horarios">
+              {{h}}
+            </li>
+          </ul>
+        </li>
       </ul>
-
-      <h1>Reservas</h1>
-      <ul>
-        <li ng-repeat="reserva in rctrl.reservas">{{reserva.start}}</li>
-      </ul>
-
     </ion-list>
 
   </ion-content>
