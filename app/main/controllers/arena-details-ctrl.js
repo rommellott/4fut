@@ -1,6 +1,6 @@
 'use strict';
 angular.module('main')
-.controller('Arena-detailsCtrl', function (arena) {
+.controller('ArenaDetailsCtrl', function (arena) {
   var vm = this;
 
   vm.arena = arena;

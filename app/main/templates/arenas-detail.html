@@ -1,9 +1,44 @@
-<ion-view view-title="main module">
-  <!-- do you want padding? -->
-  <ion-content class="padding">
-    <button ui-sref="main.reserva({id: adctrl.arena.$id})" class="button button-full button-positive">
-      RESERVAR
-    </button>
-    <pre>{{adctrl.arena | json}}</pre>
+<ion-view view-title="{{adctrl.arena.nome}}" style="background: #efefef">
+  <ion-content>
+    <ion-slide-box active-slide="index">
+      <ion-slide ng-repeat="image in adctrl.arena.album">
+        <div style="height: 30vh">
+          <img src="{{image.img}}" style="width: 100%" alt="">
+        </div>
+      </ion-slide>
+    </ion-slide-box>
+
+    <div class="list card">
+
+      <div class="item">
+        <h2>{{adctrl.arena.nome}}</h2>
+        <p><i class="icon ion-ios-location"></i> {{adctrl.arena.endereco}}</p>
+      </div>
+    </div>
+
+    <div class="list card">
+      <a href="#" class="item item-icon-left item-borderless">
+        <i class="icon ion-navigate item-icon-small"></i> 4 km
+      </a>
+
+      <a class="item item-icon-left item-borderless">
+        <i class="icon ion-link item-icon-small"></i> {{adctrl.arena.site}}
+      </a>
+
+      <a href="#" class="item item-icon-left item-borderless">
+        <i class="icon ion-ios-telephone item-icon-small"></i> {{adctrl.arena.telefone}}
+      </a>
+
+      <a href="#" class="item item-icon-left item-borderless">
+        <i class="icon ion-email item-icon-small"></i> {{adctrl.arena.email}}
+      </a>
+    </div>
+    <div class="padding-horizontal">
+      <button ui-sref="main.reserva({id: adctrl.arena.$id})" class="button button-full button-positive">
+        RESERVAR
+      </button>
+    </div>
+    
+    <!--<pre>{{adctrl.arena | json}}</pre>-->
   </ion-content>
 </ion-view>

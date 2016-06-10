@@ -12,7 +12,7 @@
               type="item-text-wrap" ui-sref="main.arenasDetail({id: arena.id})">
               <img ng-src="{{arena.fotoPerfil}}">
               <h2>{{arena.nome}}</h2>
-              <p>{{arena.distance}}</p>
+              <p>{{arena.distance | number : 2}} km</p>
               <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
           </ion-list>

@@ -8,7 +8,9 @@ angular.module('main', [
   'ui.router',
   'ionic.service.analytics',
   'firebase',
-  'uiGmapgoogle-maps'
+  'uiGmapgoogle-maps',
+  'aCarousel',
+  'tmh.dynamicLocale'
   // TODO: load other modules selected during generation
 ])
 
@@ -81,7 +83,9 @@ angular.module('main', [
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, tmhDynamicLocaleProvider) {
+
+    tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-locale-pt-br/angular-locale_pt-br.js');
 
     // ROUTING with ui.router
     $urlRouterProvider.otherwise('/login');
@@ -112,7 +116,7 @@ angular.module('main', [
         views: {
           'pageContent': {
             templateUrl: 'main/templates/arenas-detail.html',
-            controller: 'Arena-detailsCtrl as adctrl',
+            controller: 'ArenaDetailsCtrl as adctrl',
             resolve: {
               arena: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
                 return ArenasService.getArena($stateParams.id).$loaded();
@@ -135,30 +139,11 @@ angular.module('main', [
           }
         }
       })
-      .state('main.list', {
-        url: '/list',
+      .state('main.reserva.detail', {
+        url: '/arenas/:id/reserva/detail',
         views: {
           'pageContent': {
-            templateUrl: 'main/templates/list.html',
-            // controller: '<someCtrl> as ctrl'
-          }
-        }
-      })
-      .state('main.listDetail', {
-        url: '/list/detail',
-        views: {
-          'pageContent': {
-            templateUrl: 'main/templates/list-detail.html',
-            // controller: '<someCtrl> as ctrl'
-          }
-        }
-      })
-      .state('main.debug', {
-        url: '/debug',
-        views: {
-          'pageContent': {
-            templateUrl: 'main/templates/debug.html',
-            controller: 'DebugCtrl as ctrl'
+            templateUrl: 'main/templates/reserva.html',
           }
         }
       });

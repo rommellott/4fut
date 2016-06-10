@@ -1,20 +1,64 @@
 /*global _ moment*/
 'use strict';
 angular.module('main')
-  .controller('ReservaCtrl', function (quadras, ReservasService, $stateParams) {
+  .controller('ReservaCtrl', function ($scope, quadras, ReservasService, $stateParams) {
     var vm = this;
-    vm.intervaloSelecionado = getIntervaloDia(new Date());
+    vm.intervaloSelecionado = {};
     vm.horariosPorQuadra = [];
     vm.quadras = quadras;
-    vm.reservas = ReservasService.getReservasDia($stateParams.id, vm.intervaloSelecionado.start, vm.intervaloSelecionado.end);
+    vm.onSelectCarousel = onSelectCarousel;
+    vm.reservas = [];
+
+    vm.carouselOptions1 = {
+      carouselId: 'carousel-1',
+      align: 'left',
+      selectFirst: true,
+      centerOnSelect: false,
+    };
 
     activate();
 
     function activate () {
-      vm.reservas.$loaded().then(getHorariosLivres);
+      getReservas(new Date());
+      vm.carouselData1 = createArray(20);
+      console.log(vm.carouselData1 );
     }
 
-    function getHorariosLivres () {
+    function createArray () {
+      var arr = [];
+
+      for (var i = 0; i < 10; i++) {
+        var dat = new Date();
+        dat.setDate(dat.getDate() + i);
+
+        arr.push({
+          id: i,
+          display: moment(dat).format('ddd') + ' ' + dat.getDate(),
+          val: dat / 1
+        });
+      }
+
+      return arr;
+    }
+
+    function getReservas (date) {
+      vm.intervaloSelecionado = getIntervaloDia(date);
+      vm.reservas = ReservasService
+        .getReservasDia(
+          $stateParams.id,
+          vm.intervaloSelecionado.start,
+          vm.intervaloSelecionado.end)
+            .$loaded().then(getHorariosLivres);
+    }
+
+    function onSelectCarousel (item) {
+      var date = moment(item.val)._d;
+      getReservas(date);
+    }
+
+    function getHorariosLivres (reservas) {
+      vm.reservas = reservas;
+      vm.horariosPorQuadra = [];
       _.forEach(vm.quadras, function (quadra) {
         var horarios = getHorariosDia(quadra);
         vm.horariosPorQuadra.push({
@@ -31,29 +75,30 @@ angular.module('main')
 
       _.forEach(func, function (f) {
         var start = moment(f.start, 'hh:mm');
-        var end = start.add(1, 'h');
+        var end = moment(f.start, 'hh:mm').add(1, 'h');
 
         while (end <= moment(f.end, 'hh:mm')) {
           var horario = {
             start: start / 1,
-            end: end / 1
+            end: end / 1,
+            preco: f.precoAvulso,
           };
 
           var horarioLivre = _.every(vm.reservas, function (r) {
             return !(
-                r.start === horario.start ||
-                r.end === horario.end ||
-                r.start < horario.start && horario.start < horario.end ||
-                r.start > horario.start && horario.end > r.start
-              );
+              r.start === horario.start ||
+              r.end === horario.end ||
+              r.start < horario.start && r.end > horario.start ||
+              r.start > horario.start && horario.end > r.start
+            );
           });
 
           if (horarioLivre) {
             horariosLivres.push(horario);
           }
 
-          start = start.add(1, 'h');
-          end = end.add(1, 'h');
+          start.add(30, 'm');
+          end.add(30, 'm');
         }
 
       });

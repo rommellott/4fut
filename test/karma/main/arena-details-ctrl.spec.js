@@ -8,13 +8,13 @@ describe('module: main, controller: Arena-detailsCtrl', function () {
   beforeEach(module('ngHtml2Js'));
 
   // instantiate controller
-  var Arena-detailsCtrl;
+  var ArenaDetailsCtrl;
   beforeEach(inject(function ($controller) {
-    Arena-detailsCtrl = $controller('Arena-detailsCtrl');
+    ArenaDetailsCtrl = $controller('Arena-detailsCtrl');
   }));
 
   it('should do something', function () {
-    expect(!!Arena-detailsCtrl).toBe(true);
+    expect(!!ArenaDetailsCtrl).toBe(true);
   });
 
 });

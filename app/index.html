@@ -17,6 +17,7 @@
 
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/ionic-advanced-carousel/dist/advanced-carousel.min.css" />
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -66,20 +67,22 @@
   <script src="bower_components/lodash/lodash.js"></script>
   <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
   <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/ionic-advanced-carousel/dist/advanced-carousel.min.js"></script>
+  <script src="bower_components/angular-locale-pt-br/angular-locale_pt-br.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
   
+<script src="bower_components/moment/locale/pt-br.js"></script>
+
   <!-- build:js scripts/app.js -->
   <!-- inject:js -->
   <script src="main/main.js"></script>
   <script src="main/services/reservas-service-serv.js"></script>
   <script src="main/services/main-serv.js"></script>
   <script src="main/services/arenas-serv.js"></script>
-  <script src="main/controllers/user-ctrl.js"></script>
   <script src="main/controllers/reserva-ctrl.js"></script>
   <script src="main/controllers/menu-ctrl.js"></script>
   <script src="main/controllers/login-ctrl.js"></script>
-  <script src="main/controllers/debug-ctrl.js"></script>
   <script src="main/controllers/arenas-ctrl.js"></script>
   <script src="main/controllers/arena-details-ctrl.js"></script>
   <script src="main/constants/config-const.js"></script>
