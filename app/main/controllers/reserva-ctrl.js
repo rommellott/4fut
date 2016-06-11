@@ -1,8 +1,9 @@
 /*global _ moment*/
 'use strict';
 angular.module('main')
-  .controller('ReservaCtrl', function ($scope, quadras, ReservasService, $stateParams) {
+  .controller('ReservaCtrl', function ($scope, arena, quadras, ReservasService, $stateParams) {
     var vm = this;
+    vm.arena = arena;
     vm.intervaloSelecionado = {};
     vm.horariosPorQuadra = [];
     vm.quadras = quadras;

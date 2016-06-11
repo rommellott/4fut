@@ -1,9 +1,12 @@
 <ion-view view-title="main module" style="background: #efefef">
-  <!-- do you want padding? -->
   <ion-content class="padding">
     <a-carousel item-directive="carousel-text-item" carousel-options="::rctrl.carouselOptions1" array-provider="::rctrl.carouselData1"
       on-select="rctrl.onSelectCarousel(item)">
     </a-carousel>
+    
+    <button sref="^" class="button button-stable">
+      button-stable
+    </button>
     <!-- content goes here -->
     <ion-list>
       <h1>Horários</h1>
@@ -13,7 +16,7 @@
           <div class="row" ng-repeat="hr in horario.horarios | orderBy:'start'" ng-if="$index % 3 === 0">
             <div class="col col-33" ng-if="$index < horario.horarios.length">
 
-              <button ui-sref="main.reserva.detail({id: adctrl.arena.$id})" class="button button-block button-small button-positive">
+              <button ui-sref="tab.arenas.detail.reserva.detail" class="button button-block button-small button-positive">
                 {{horario.horarios[$index].start | date :'HH:mm'}}
                 <span class="badge badge-assertive icon-badge badge-price">
                   {{horario.horarios[$index].preco | currency : "R$"}}/h

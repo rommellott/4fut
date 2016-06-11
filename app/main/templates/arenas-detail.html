@@ -1,4 +1,5 @@
 <ion-view view-title="{{adctrl.arena.nome}}" style="background: #efefef">
+  
   <ion-content>
     <ion-slide-box active-slide="index">
       <ion-slide ng-repeat="image in adctrl.arena.album">
@@ -32,9 +33,9 @@
       <a href="#" class="item item-icon-left item-borderless">
         <i class="icon ion-email item-icon-small"></i> {{adctrl.arena.email}}
       </a>
-    </div>
+    </div> 
     <div class="padding-horizontal">
-      <button ui-sref="main.reserva({id: adctrl.arena.$id})" class="button button-full button-positive">
+      <button ui-sref="tab.arenas.detail.reserva" class="button button-full button-positive">
         RESERVAR
       </button>
     </div>
