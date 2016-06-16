@@ -1,5 +1,5 @@
-<ion-view view-title="{{adctrl.arena.nome}}" style="background: #efefef">
-  
+<ion-view view-title="{{adctrl.arena.nome}}" style="background: #efefef" hide-tabs>
+
   <ion-content>
     <ion-slide-box active-slide="index">
       <ion-slide ng-repeat="image in adctrl.arena.album">
@@ -8,7 +8,6 @@
         </div>
       </ion-slide>
     </ion-slide-box>
-
     <div class="list card">
 
       <div class="item">
@@ -34,12 +33,60 @@
         <i class="icon ion-email item-icon-small"></i> {{adctrl.arena.email}}
       </a>
     </div> 
-    <div class="padding-horizontal">
+    <!--<div class="padding-horizontal">
       <button ui-sref="tab.arenas.detail.reserva" class="button button-full button-positive">
         RESERVAR
       </button>
-    </div>
+    </div>-->
     
+    <a-carousel item-directive="carousel-text-item" carousel-options="::adctrl.carouselOptions1" array-provider="::adctrl.carouselData1"
+      on-select="adctrl.onSelectCarousel(item)">
+    </a-carousel>
+    
+    <!-- content goes here -->
+    <ion-list>
+      <h1>Horários</h1>
+      <ul>
+        <li ng-repeat="horario in adctrl.horariosPorQuadra">
+          {{horario.quadra.nome}}
+          <div class="row" ng-repeat="hr in horario.horarios | orderBy:'start'" ng-if="$index % 3 === 0">
+            <div class="col col-33" ng-if="$index < horario.horarios.length">
+
+              <button ui-sref="tab.arenas.detail.reserva.detail" class="button button-block button-small button-positive">
+                {{horario.horarios[$index].start | date :'HH:mm'}}
+                <span class="badge badge-assertive icon-badge badge-price">
+                  {{horario.horarios[$index].preco | currency : "R$"}}/h
+                </span>
+              </button>
+            </div>
+            <div class="col col-33" ng-if="$index + 1 < horario.horarios.length">
+              <button class="button button-block button-small button-positive">
+               {{horario.horarios[$index + 1].start| date :'HH:mm'}}
+               <span class="badge badge-assertive icon-badge badge-price">
+                  {{horario.horarios[$index + 1].preco | currency : "R$"}}/h
+                </span>
+              </button>
+            </div>
+            <div class="col col-33" ng-if="$index + 2 < horario.horarios.length">
+              <button class="button button-block button-small button-positive">
+                {{horario.horarios[$index + 2].start| date :'HH:mm'}}
+                <span class="badge badge-assertive icon-badge badge-price">
+                  {{horario.horarios[$index + 2].preco | currency : "R$"}}/h
+                </span>
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </ion-list>
     <!--<pre>{{adctrl.arena | json}}</pre>-->
   </ion-content>
 </ion-view>
+
+<script type="text/ng-template" id="carousel-template.html">
+    <div class="carousel-item demo-1" >
+    <div class="circle">
+        <span ng-bind="::vm.ngModel.display"></span>
+    </div>
+</div>
+</script>
