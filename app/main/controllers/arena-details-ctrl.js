@@ -1,27 +1,38 @@
 /*global _ moment*/
 'use strict';
 angular.module('main')
-  .controller('ArenaDetailsCtrl', function ($scope, arena, quadras, ReservasService, $stateParams) {
+  .controller('ArenaDetailsCtrl', function ($scope, arena, quadras, ReservasService, $stateParams, $ionicModal) {
     var vm = this;
     vm.arena = arena;
     vm.intervaloSelecionado = {};
     vm.horariosPorQuadra = [];
+    vm.reservas = [];
     vm.quadras = quadras;
     vm.onSelectCarousel = onSelectCarousel;
-    vm.reservas = [];
-    vm.carouselOptions1 = {
-      carouselId: 'carousel-1',
-      align: 'left',
-      selectFirst: true,
-      centerOnSelect: false,
-    };
 
     activate();
 
     function activate () {
       getReservas(new Date());
+      vm.carouselOptions1 = {
+        carouselId: 'carousel-1',
+        align: 'left',
+        selectFirst: true,
+        centerOnSelect: false,
+      };
       vm.carouselData1 = createArray(20);
-      console.log(vm.carouselData1);
+      $ionicModal.fromTemplateUrl('/main/templates/confirma-reserva.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+      }).then(function (modal) {
+        $scope.modal = modal;
+      });
+      $scope.openModal = function () {
+        $scope.modal.show();
+      };
+      $scope.closeModal = function () {
+        $scope.modal.hide();
+      };
     }
 
     function createArray () {
@@ -74,10 +85,10 @@ angular.module('main')
       var horariosLivres = [];
 
       _.forEach(func, function (f) {
-        var start = moment(f.start, 'hh:mm');
-        var end = moment(f.start, 'hh:mm').add(1, 'h');
+        var start = moment(moment(vm.intervaloSelecionado.start).format('DD/MM/YYYY') + f.start, 'DD/MM/YYYYhh:mm');
+        var end = moment(moment(vm.intervaloSelecionado.start).format('DD/MM/YYYY') + f.start, 'DD/MM/YYYYhh:mm').add(1, 'h');
 
-        while (end <= moment(f.end, 'hh:mm')) {
+        while (end <= moment(moment(vm.intervaloSelecionado.start).format('DD/MM/YYYY') + f.end, 'DD/MM/YYYYhh:mm')) {
           var horario = {
             start: start / 1,
             end: end / 1,
@@ -93,7 +104,7 @@ angular.module('main')
             );
           });
 
-          if (horarioLivre) {
+          if (horarioLivre && start._d >= new Date()) {
             horariosLivres.push(horario);
           }
 

@@ -52,7 +52,7 @@
           <div class="row" ng-repeat="hr in horario.horarios | orderBy:'start'" ng-if="$index % 3 === 0">
             <div class="col col-33" ng-if="$index < horario.horarios.length">
 
-              <button ui-sref="tab.arenas.detail.reserva.detail" class="button button-block button-small button-positive">
+              <button ng-click="modal.show();" class="button button-block button-small button-positive">
                 {{horario.horarios[$index].start | date :'HH:mm'}}
                 <span class="badge badge-assertive icon-badge badge-price">
                   {{horario.horarios[$index].preco | currency : "R$"}}/h
@@ -83,10 +83,3 @@
   </ion-content>
 </ion-view>
 
-<script type="text/ng-template" id="carousel-template.html">
-    <div class="carousel-item demo-1" >
-    <div class="circle">
-        <span ng-bind="::vm.ngModel.display"></span>
-    </div>
-</div>
-</script>

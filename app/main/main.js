@@ -30,11 +30,11 @@ angular.module('main', [
 
       var deploy = new Ionic.Deploy();
       deploy.watch().then(
-        function noop() {
+        function noop () {
         },
-        function noop() {
+        function noop () {
         },
-        function hasUpdate(hasUpdate) {
+        function hasUpdate (hasUpdate) {
           console.log('Has Update ', hasUpdate);
           if (hasUpdate) {
             console.log('Calling ionicDeploy.update()');
@@ -131,30 +131,6 @@ angular.module('main', [
         }
       })
 
-      // .state('tab.arenas.detail.reserva', {
-      //   url: '/reserva',
-      //   views: {
-      //     'tab.arenas@tab': {
-      //       templateUrl: 'main/templates/reserva.html',
-      //       controller: 'ReservaCtrl as rctrl'
-      //     }
-      //   },
-      //   resolve: {
-      //     quadras: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
-      //       return ArenasService.getQuadrasArena($stateParams.id).$loaded();
-      //     }]
-      //   }
-      // })
-
-      // .state('tab.arenas.detail.reserva.detail', {
-      //   url: '/detail',
-      //   views: {
-      //     'tab.arenas@tab': {
-      //       templateUrl: 'main/templates/reserva-detail.html',
-      //     }
-      //   }
-      // })
-
       .state('tab.jogos', {
         url: '/jogos',
         views: {
@@ -171,58 +147,6 @@ angular.module('main', [
           'tab-perfil': {
             templateUrl: 'main/templates/perfil.html',
             controller: 'PerfilCtrl as pctr'
-          }
-        }
-      })
-
-      .state('main', {
-        url: '/main',
-        abstract: true,
-        templateUrl: 'main/templates/menu.html',
-        controller: 'MenuCtrl as menu'
-      })
-      .state('main.arenas', {
-        url: '/arenas',
-        views: {
-          'pageContent': {
-            templateUrl: 'main/templates/arenas-list.html',
-            controller: 'ArenasCtrl as actrl'
-          }
-        }
-      })
-      .state('main.arenas.details', {
-        url: '/:id',
-        views: {
-          'teste': {
-            templateUrl: 'main/templates/arenas-detail.html',
-            controller: 'ArenaDetailsCtrl as adctrl',
-            resolve: {
-              arena: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
-                return ArenasService.getArena($stateParams.id).$loaded();
-              }]
-            }
-          }
-        }
-      })
-      .state('main.arenasDetail.reserva', {
-        url: '/reserva',
-        views: {
-          'pageContent@reserva': {
-            templateUrl: 'main/templates/reserva.html',
-            controller: 'ReservaCtrl as rctrl',
-            resolve: {
-              quadras: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
-                return ArenasService.getQuadrasArena('bombonera').$loaded();
-              }]
-            }
-          }
-        }
-      })
-      .state('main.reserva.detail', {
-        url: '/arenas/:id/reserva/detail',
-        views: {
-          'pageContent': {
-            templateUrl: 'main/templates/reserva.html',
           }
         }
       });

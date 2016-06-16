@@ -10,6 +10,8 @@ var config = {
   databaseURL: 'https://pelapp.firebaseio.com',
   storageBucket: 'project-1558131433489077274.appspot.com',
 };
+
+// Initialize the FirebaseUI Widget using Firebase.
 firebase.initializeApp(config);
 
 angular.module('main')

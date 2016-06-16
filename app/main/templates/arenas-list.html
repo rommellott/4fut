@@ -6,7 +6,7 @@
 
     <ion-list ng-if="!actrl.mapView">
       <ion-item ng-repeat="arena in actrl.arenas | orderBy:'distance'" class="item-remove-animate item-avatar item-icon-right"
-        type="item-text-wrap" ui-sref="tab.arenas-detail({id : })"  href="#/tab/arenas/{{arena.id}}">
+        type="item-text-wrap"  href="#/tab/arenas/{{arena.id}}">
         <img ng-src="{{arena.fotoPerfil}}">
         <h2>{{arena.nome}}</h2>
         <p>{{arena.distance | number : 2}} km</p>
