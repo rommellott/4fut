@@ -1,4 +1,4 @@
-/*global Ionic cordova StatusBar firebase*/
+/*global Ionic cordova StatusBar*/
 /*eslint no-undef: "error"*/
 
 'use strict';
@@ -83,8 +83,8 @@ angular.module('main', [
   //   });
   // })
 
-  .config(function ($stateProvider, $urlRouterProvider, tmhDynamicLocaleProvider) {
-
+  .config(function ($stateProvider, $urlRouterProvider, tmhDynamicLocaleProvider, $ionicConfigProvider) {
+    $ionicConfigProvider.tabs.position('top');
     tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-locale-pt-br/angular-locale_pt-br.js');
 
     // ROUTING with ui.router
@@ -113,10 +113,10 @@ angular.module('main', [
           }
         }
       })
-      .state('tab.arenas.detail', {
-        url: '/:id',
+      .state('tab.arenas-detail', {
+        url: '/arenas/:id',
         views: {
-          'tab.arenas@tab': {
+          'tab.arenas': {
             templateUrl: 'main/templates/arenas-detail.html',
             controller: 'ArenaDetailsCtrl as adctrl',
           }
@@ -124,33 +124,36 @@ angular.module('main', [
         resolve: {
           arena: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
             return ArenasService.getArena($stateParams.id).$loaded();
-          }]
-        }
-      })
-
-      .state('tab.arenas.detail.reserva', {
-        url: '/reserva',
-        views: {
-          'tab.arenas@tab': {
-            templateUrl: 'main/templates/reserva.html',
-            controller: 'ReservaCtrl as rctrl'
-          }
-        },
-        resolve: {
+          }],
           quadras: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
             return ArenasService.getQuadrasArena($stateParams.id).$loaded();
           }]
         }
       })
 
-      .state('tab.arenas.detail.reserva.detail', {
-        url: '/detail',
-        views: {
-          'tab.arenas@tab': {
-            templateUrl: 'main/templates/reserva-detail.html',
-          }
-        }
-      })
+      // .state('tab.arenas.detail.reserva', {
+      //   url: '/reserva',
+      //   views: {
+      //     'tab.arenas@tab': {
+      //       templateUrl: 'main/templates/reserva.html',
+      //       controller: 'ReservaCtrl as rctrl'
+      //     }
+      //   },
+      //   resolve: {
+      //     quadras: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
+      //       return ArenasService.getQuadrasArena($stateParams.id).$loaded();
+      //     }]
+      //   }
+      // })
+
+      // .state('tab.arenas.detail.reserva.detail', {
+      //   url: '/detail',
+      //   views: {
+      //     'tab.arenas@tab': {
+      //       templateUrl: 'main/templates/reserva-detail.html',
+      //     }
+      //   }
+      // })
 
       .state('tab.jogos', {
         url: '/jogos',
@@ -158,6 +161,16 @@ angular.module('main', [
           'tab-jogos': {
             templateUrl: 'main/templates/jogos.html',
             controller: 'JogosCtrl as jctr'
+          }
+        }
+      })
+
+      .state('tab.perfil', {
+        url: '/perfil',
+        views: {
+          'tab-perfil': {
+            templateUrl: 'main/templates/perfil.html',
+            controller: 'PerfilCtrl as pctr'
           }
         }
       })
@@ -227,4 +240,16 @@ angular.module('main', [
     GoogleMapApiProviders.configure({
       brazil: true
     });
-  }]);
+  }])
+
+  .directive('hideTabs', function ($rootScope) {
+    return {
+      restrict: 'A',
+      link: function ($scope) {
+        $rootScope.hideTabs = 'tabs-item-hide';
+        $scope.$on('$destroy', function () {
+          $rootScope.hideTabs = '';
+        });
+      }
+    };
+  });

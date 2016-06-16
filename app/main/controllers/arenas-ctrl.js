@@ -9,6 +9,11 @@ angular.module('main')
 
     $cordovaGeolocation.getCurrentPosition().then(loadArenas, fail);
 
+    activate();
+
+    function activate () {
+    }
+
     function loadArenas (position) {
       vm.map = {
         center: {
@@ -21,7 +26,7 @@ angular.module('main')
       // Setup a GeoQuery
       var geoQuery = geoFire.query({
         center: [position.coords.latitude, position.coords.longitude],
-        radius: 10
+        radius: 10000000
       });
 
       geoQuery.on('key_entered', function (key, location, distance) {
