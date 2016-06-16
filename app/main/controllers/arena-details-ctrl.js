@@ -9,10 +9,11 @@ angular.module('main')
     vm.reservas = [];
     vm.quadras = quadras;
     vm.onSelectCarousel = onSelectCarousel;
+    vm.openConfirmacaoModal = openConfirmacaoModal;
 
     activate();
 
-    function activate () {
+    function activate() {
       getReservas(new Date());
       vm.carouselOptions1 = {
         carouselId: 'carousel-1',
@@ -35,7 +36,7 @@ angular.module('main')
       };
     }
 
-    function createArray () {
+    function createArray() {
       var arr = [];
 
       for (var i = 0; i < 10; i++) {
@@ -52,7 +53,7 @@ angular.module('main')
       return arr;
     }
 
-    function getReservas (date) {
+    function getReservas(date) {
       vm.intervaloSelecionado = getIntervaloDia(date);
       vm.reservas = ReservasService
         .getReservasDia(
@@ -62,12 +63,12 @@ angular.module('main')
         .$loaded().then(getHorariosLivres);
     }
 
-    function onSelectCarousel (item) {
+    function onSelectCarousel(item) {
       var date = moment(item.val)._d;
       getReservas(date);
     }
 
-    function getHorariosLivres (reservas) {
+    function getHorariosLivres(reservas) {
       vm.reservas = reservas;
       vm.horariosPorQuadra = [];
       _.forEach(vm.quadras, function (quadra) {
@@ -79,7 +80,7 @@ angular.module('main')
       });
     }
 
-    function getHorariosDia (quadra) {
+    function getHorariosDia(quadra) {
       var diaSemana = moment(vm.intervaloSelecionado.start)._d.getDay() + '';
       var func = _.orderBy(_.filter(quadra.funcionamento, { dow: diaSemana }), 'start', 'asc');
       var horariosLivres = [];
@@ -116,13 +117,38 @@ angular.module('main')
       return horariosLivres;
     }
 
-    function getIntervaloDia (date) {
+    function getIntervaloDia(date) {
       var startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       var endOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
       return {
         start: startOfDay / 1,
         end: endOfDay / 1
       };
+    }
+
+    function openConfirmacaoModal(horario, index) {
+      vm.horarioSelecionado = horario.horarios[index];
+
+      $scope.modalData = {
+        horario: vm.horarioSelecionado,
+        quadra: horario.quadra,
+        duracao: 1,
+        horarioExtraDisponivel: getHorarioExtraDisponivel(),
+      };
+      $scope.modal.show();
+    }
+
+    function getHorarioExtraDisponivel () {
+      var proximasReservas = _.orderBy(_.filter(vm.reservas, function (val) {
+        return val.start >= vm.horarioSelecionado.end;
+      }), 'start', 'asc');
+
+      if (proximasReservas.length === 0) {
+        return 2.5;
+      }
+      else {
+        return moment.duration(moment(proximasReservas[0].start).diff(vm.horarioSelecionado.start)). asHours();
+      }
     }
 
   });

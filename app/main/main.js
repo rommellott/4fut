@@ -118,7 +118,7 @@ angular.module('main', [
         views: {
           'tab.arenas': {
             templateUrl: 'main/templates/arenas-detail.html',
-            controller: 'ArenaDetailsCtrl as adctrl',
+            controller: 'ArenaDetailsCtrl as vm',
           }
         },
         resolve: {

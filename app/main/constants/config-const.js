@@ -1,3 +1,4 @@
+
 /*global firebase*/
 /*eslint no-undef: "error"*/
 

@@ -1,8 +1,8 @@
-<ion-view view-title="{{adctrl.arena.nome}}" style="background: #efefef" hide-tabs>
+<ion-view view-title="{{vm.arena.nome}}" style="background: #efefef" hide-tabs>
 
   <ion-content>
     <ion-slide-box active-slide="index">
-      <ion-slide ng-repeat="image in adctrl.arena.album">
+      <ion-slide ng-repeat="image in vm.arena.album">
         <div style="height: 30vh">
           <img src="{{image.img}}" style="width: 100%" alt="">
         </div>
@@ -11,8 +11,8 @@
     <div class="list card">
 
       <div class="item">
-        <h2>{{adctrl.arena.nome}}</h2>
-        <p><i class="icon ion-ios-location"></i> {{adctrl.arena.endereco}}</p>
+        <h2>{{vm.arena.nome}}</h2>
+        <p><i class="icon ion-ios-location"></i> {{vm.arena.endereco}}</p>
       </div>
     </div>
 
@@ -22,15 +22,15 @@
       </a>
 
       <a class="item item-icon-left item-borderless">
-        <i class="icon ion-link item-icon-small"></i> {{adctrl.arena.site}}
+        <i class="icon ion-link item-icon-small"></i> {{vm.arena.site}}
       </a>
 
       <a href="#" class="item item-icon-left item-borderless">
-        <i class="icon ion-ios-telephone item-icon-small"></i> {{adctrl.arena.telefone}}
+        <i class="icon ion-ios-telephone item-icon-small"></i> {{vm.arena.telefone}}
       </a>
 
       <a href="#" class="item item-icon-left item-borderless">
-        <i class="icon ion-email item-icon-small"></i> {{adctrl.arena.email}}
+        <i class="icon ion-email item-icon-small"></i> {{vm.arena.email}}
       </a>
     </div> 
     <!--<div class="padding-horizontal">
@@ -39,20 +39,20 @@
       </button>
     </div>-->
     
-    <a-carousel item-directive="carousel-text-item" carousel-options="::adctrl.carouselOptions1" array-provider="::adctrl.carouselData1"
-      on-select="adctrl.onSelectCarousel(item)">
+    <a-carousel item-directive="carousel-text-item" carousel-options="::vm.carouselOptions1" array-provider="::vm.carouselData1"
+      on-select="vm.onSelectCarousel(item)">
     </a-carousel>
     
     <!-- content goes here -->
     <ion-list>
       <h1>Horários</h1>
       <ul>
-        <li ng-repeat="horario in adctrl.horariosPorQuadra">
+        <li ng-repeat="horario in vm.horariosPorQuadra">
           {{horario.quadra.nome}}
           <div class="row" ng-repeat="hr in horario.horarios | orderBy:'start'" ng-if="$index % 3 === 0">
             <div class="col col-33" ng-if="$index < horario.horarios.length">
 
-              <button ng-click="modal.show();" class="button button-block button-small button-positive">
+              <button ng-click="vm.openConfirmacaoModal(horario , $index);" class="button button-block button-small button-positive">
                 {{horario.horarios[$index].start | date :'HH:mm'}}
                 <span class="badge badge-assertive icon-badge badge-price">
                   {{horario.horarios[$index].preco | currency : "R$"}}/h
@@ -60,7 +60,7 @@
               </button>
             </div>
             <div class="col col-33" ng-if="$index + 1 < horario.horarios.length">
-              <button class="button button-block button-small button-positive">
+              <button ng-click="vm.openConfirmacaoModal(horario, $index + 1);" class="button button-block button-small button-positive">
                {{horario.horarios[$index + 1].start| date :'HH:mm'}}
                <span class="badge badge-assertive icon-badge badge-price">
                   {{horario.horarios[$index + 1].preco | currency : "R$"}}/h
@@ -68,7 +68,7 @@
               </button>
             </div>
             <div class="col col-33" ng-if="$index + 2 < horario.horarios.length">
-              <button class="button button-block button-small button-positive">
+              <button ng-click="vm.openConfirmacaoModal(horario , $index + 2);" class="button button-block button-small button-positive">
                 {{horario.horarios[$index + 2].start| date :'HH:mm'}}
                 <span class="badge badge-assertive icon-badge badge-price">
                   {{horario.horarios[$index + 2].preco | currency : "R$"}}/h
@@ -79,7 +79,7 @@
         </li>
       </ul>
     </ion-list>
-    <!--<pre>{{adctrl.arena | json}}</pre>-->
+    <!--<pre>{{vm.arena | json}}</pre>-->
   </ion-content>
 </ion-view>
 

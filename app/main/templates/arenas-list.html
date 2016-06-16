@@ -2,7 +2,7 @@
   <ion-nav-buttons side="right">
     <a ng-click="actrl.mapView = !actrl.mapView" ng-class="actrl.mapView ? 'ion-ios-list-outline' : 'ion-map'" class="button button-icon icon"></a>
   </ion-nav-buttons>
-  <ion-content>
+  <ion-content style="top:93px">
 
     <ion-list ng-if="!actrl.mapView">
       <ion-item ng-repeat="arena in actrl.arenas | orderBy:'distance'" class="item-remove-animate item-avatar item-icon-right"
