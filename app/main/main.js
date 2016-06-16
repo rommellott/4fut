@@ -30,11 +30,11 @@ angular.module('main', [
 
       var deploy = new Ionic.Deploy();
       deploy.watch().then(
-        function noop () {
+        function noop() {
         },
-        function noop () {
+        function noop() {
         },
-        function hasUpdate (hasUpdate) {
+        function hasUpdate(hasUpdate) {
           console.log('Has Update ', hasUpdate);
           if (hasUpdate) {
             console.log('Calling ionicDeploy.update()');
@@ -101,7 +101,8 @@ angular.module('main', [
       .state('tab', {
         url: '/tab',
         abstract: true,
-        templateUrl: 'main/templates/tabs.html'
+        templateUrl: 'main/templates/tabs.html',
+        controller: 'ApplicationController'
       })
 
       .state('tab.arenas', {
@@ -152,6 +153,15 @@ angular.module('main', [
       });
   })
 
+  .controller('ApplicationController', function ($state, $rootScope) {
+
+    var hideTabsStates = ['tab.arenas-detail'];
+
+    $rootScope.$on('$ionicView.beforeEnter', function () {
+      $rootScope.hideTabs = ~hideTabsStates.indexOf($state.current.name);
+    });
+  })
+
   .config(function (uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({
       //    key: 'your api key',
@@ -164,16 +174,4 @@ angular.module('main', [
     GoogleMapApiProviders.configure({
       brazil: true
     });
-  }])
-
-  .directive('hideTabs', function ($rootScope) {
-    return {
-      restrict: 'A',
-      link: function ($scope) {
-        $rootScope.hideTabs = 'tabs-item-hide';
-        $scope.$on('$destroy', function () {
-          $rootScope.hideTabs = '';
-        });
-      }
-    };
-  });
+  }]);

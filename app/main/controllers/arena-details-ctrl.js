@@ -28,12 +28,6 @@ angular.module('main')
       }).then(function (modal) {
         $scope.modal = modal;
       });
-      $scope.openModal = function () {
-        $scope.modal.show();
-      };
-      $scope.closeModal = function () {
-        $scope.modal.hide();
-      };
     }
 
     function createArray() {
@@ -134,11 +128,12 @@ angular.module('main')
         quadra: horario.quadra,
         duracao: 1,
         horarioExtraDisponivel: getHorarioExtraDisponivel(),
+        salvarReserva: salvarNovaReserva
       };
       $scope.modal.show();
     }
 
-    function getHorarioExtraDisponivel () {
+    function getHorarioExtraDisponivel() {
       var proximasReservas = _.orderBy(_.filter(vm.reservas, function (val) {
         return val.start >= vm.horarioSelecionado.end;
       }), 'start', 'asc');
@@ -147,8 +142,30 @@ angular.module('main')
         return 2.5;
       }
       else {
-        return moment.duration(moment(proximasReservas[0].start).diff(vm.horarioSelecionado.start)). asHours();
+        return moment.duration(moment(proximasReservas[0].start).diff(vm.horarioSelecionado.start)).asHours();
       }
+    }
+
+    $scope.SalvarReserva = function () {
+      salvarNovaReserva();
+    };
+
+    function salvarNovaReserva() {
+      var novaReserva = {
+        tipo: 1,
+        quadra: $scope.modalData.quadra.$id,
+        responsavel: 'teste',
+        start: vm.horarioSelecionado.start,
+        end: moment(vm.horarioSelecionado.start).add($scope.modalData.duracao, 'h') / 1,
+        title: 'teste'
+      };
+      ReservasService.criarReservaAvulsa(novaReserva, vm.arena.$id).then(function () {
+        console.log('Reserva criada com sucesso!');
+        getReservas(new Date());
+        $scope.modal.hide();
+      }, function (error) {
+        console.log(error, novaReserva, 'Ops!');
+      });
     }
 
   });
