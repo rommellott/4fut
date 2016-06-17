@@ -1,4 +1,4 @@
-/*global Ionic cordova StatusBar*/
+/*global Ionic cordova StatusBar firebase*/
 /*eslint no-undef: "error"*/
 
 'use strict';
@@ -10,7 +10,8 @@ angular.module('main', [
   'firebase',
   'uiGmapgoogle-maps',
   'aCarousel',
-  'tmh.dynamicLocale'
+  'tmh.dynamicLocale',
+  'ionic.wizard'
   // TODO: load other modules selected during generation
 ])
 
@@ -63,25 +64,24 @@ angular.module('main', [
     });
   })
 
-  // .run(function ($rootScope, $state) {
-  //   // watch for login status changes and redirect if appropriate
-  //   $rootScope.$on('$stateChangeStart', function (evt, toState) {
-  //     var auth = firebase.auth();
-  //     auth.onAuthStateChanged(function (user) {
-  //       if (user) {
-  //         // User is signed in.
-  //         if (toState.name === 'login') {
-  //           $state.go('main.arenas');
-  //         }
-  //       } else if (toState.name !== 'login') {
-  //         // User is signed out.
-  //         $state.go('login');
-  //       }
-  //     }, function (error) {
-  //       console.log(error);
-  //     });
-  //   });
-  // })
+  .run(function ($state, $rootScope) {
+    $rootScope.$on('$stateChangeStart', function (evt, toState) {
+      var auth = firebase.auth();
+      auth.onAuthStateChanged(function (user) {
+        if (user) {
+          // User is signed in.
+          if (toState.name === 'login') {
+            $state.go('tab.arenas');
+          }
+        } else if (toState.name !== 'login') {
+          // User is signed out.
+          $state.go('login');
+        }
+      }, function (error) {
+        console.log(error);
+      });
+    });
+  })
 
   .config(function ($stateProvider, $urlRouterProvider, tmhDynamicLocaleProvider, $ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('top');
@@ -96,6 +96,23 @@ angular.module('main', [
         url: '/login',
         templateUrl: 'main/templates/login.html',
         controller: 'LoginCtrl'
+      })
+
+      .state('wizard', {
+        url: '/wizard',
+        abstract: true,
+        template: '<ion-nav-view></ion-nav-view>'
+      })
+
+      .state('wizard.intro', {
+        url: '/intro',
+        templateUrl: 'main/templates/startup-wizard.html',
+        controller: 'StartupCtrl as vm',
+        resolve: {
+          user: ['UserService', function (UserService) {
+            return UserService.getUserProfile(firebase.auth().currentUser.uid);
+          }]
+        }
       })
 
       .state('tab', {
@@ -147,7 +164,7 @@ angular.module('main', [
         views: {
           'tab-perfil': {
             templateUrl: 'main/templates/perfil.html',
-            controller: 'PerfilCtrl as pctr'
+            controller: 'PerfilCtrl as vm'
           }
         }
       });

@@ -1,7 +1,16 @@
+/*global firebase*/
 'use strict';
 angular.module('main')
-.controller('PerfilCtrl', function ($log) {
+  .controller('PerfilCtrl', function ($state) {
 
-  $log.log('Hello from your Controller: PerfilCtrl in module main:. This is your controller:', this);
+    var vm = this;
 
-});
+    vm.logOut = function () {
+      firebase.auth().signOut().then(function () {
+        $state.go('login');
+      }, function (error) {
+        console.log(error);
+      });
+    };
+  });
+

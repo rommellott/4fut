@@ -1,4 +1,4 @@
-/*global _ moment $q*/
+/*global _ moment $q firebase*/
 'use strict';
 angular.module('main')
   .factory('ReservasService', function (Ref, $firebaseArray, $q) {
@@ -26,20 +26,18 @@ angular.module('main')
       verificaHorarioPeriodo(novaReserva, arena).then(function (horarioValido) {
 
         if (horarioValido) {
-          var list = $firebaseArray(getRef().child(arena));
-          var reserva = {
-            tipo: novaReserva.tipo,
-            quadra: novaReserva.quadra,
-            responsavel: novaReserva.responsavel,
-            start: novaReserva.start,
-            end: novaReserva.end,
-            title: novaReserva.title
-          };
+          var reservaId = getRef().child(arena).push().key;
+          var reservaData = {};
+          reservaData['arenas/' + arena + '/contatos/' + firebase.auth().currentUser.uid] = true;
+          reservaData['reservas/' + arena + '/' + reservaId] = novaReserva;
 
-          list.$add(reserva).then(function () {
-            deferred.resolve();
-          }, function () {
-            deferred.reject('Erro ao cadastrar nova turma');
+          Ref.update(reservaData, function (error) {
+            if (error) {
+              deferred.reject('Erro ao cadastrar nova turma');
+            }
+            else {
+              deferred.resolve();
+            }
           });
         }
         else {

@@ -1,4 +1,4 @@
-/*global _ moment*/
+/*global _ moment firebase*/
 'use strict';
 angular.module('main')
   .controller('ArenaDetailsCtrl', function ($scope, arena, quadras, ReservasService, $stateParams, $ionicModal) {
@@ -58,8 +58,8 @@ angular.module('main')
     }
 
     function onSelectCarousel(item) {
-      var date = moment(item.val)._d;
-      getReservas(date);
+      vm.diaSelecionado = moment(item.val)._d;
+      getReservas(vm.diaSelecionado);
     }
 
     function getHorariosLivres(reservas) {
@@ -127,8 +127,10 @@ angular.module('main')
         horario: vm.horarioSelecionado,
         quadra: horario.quadra,
         duracao: 1,
-        horarioExtraDisponivel: getHorarioExtraDisponivel(),
-        salvarReserva: salvarNovaReserva
+        horarioExtraDisponivel: getHorarioExtraDisponivel()
+      };
+      $scope.SalvarReserva = function () {
+        salvarNovaReserva();
       };
       $scope.modal.show();
     }
@@ -146,22 +148,20 @@ angular.module('main')
       }
     }
 
-    $scope.SalvarReserva = function () {
-      salvarNovaReserva();
-    };
-
     function salvarNovaReserva() {
       var novaReserva = {
         tipo: 1,
         quadra: $scope.modalData.quadra.$id,
-        responsavel: 'teste',
+        responsavel: firebase.auth().currentUser.uid,
         start: vm.horarioSelecionado.start,
         end: moment(vm.horarioSelecionado.start).add($scope.modalData.duracao, 'h') / 1,
-        title: 'teste'
+        saldoDevedor: $scope.modalData.horario.preco * $scope.modalData.duracao,
+        saldoQuitado: 0,
+        title: firebase.auth().currentUser.displayName
       };
       ReservasService.criarReservaAvulsa(novaReserva, vm.arena.$id).then(function () {
         console.log('Reserva criada com sucesso!');
-        getReservas(new Date());
+        getReservas(vm.diaSelecionado);
         $scope.modal.hide();
       }, function (error) {
         console.log(error, novaReserva, 'Ops!');

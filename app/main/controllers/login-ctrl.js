@@ -1,7 +1,7 @@
-/*global firebase firebaseui*/
+/*global firebase firebaseui _*/
 'use strict';
 angular.module('main')
-  .controller('LoginCtrl', function ($state) {
+  .controller('LoginCtrl', function ($state, Ref) {
 
     var auth = firebase.auth();
 
@@ -11,7 +11,7 @@ angular.module('main')
       'queryParameterForWidgetMode': 'mode',
       // Query parameter name for sign in success url.
       'queryParameterForSignInSuccessUrl': 'signInSuccessUrl',
-      'signInSuccessUrl': '#/main/arenas',
+      'signInSuccessUrl': '#/tab/arenas',
       'signInOptions': [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.FacebookAuthProvider.PROVIDER_ID,
@@ -20,12 +20,32 @@ angular.module('main')
       // Terms of service url.
       'tosUrl': '<your-tos-url>',
       'callbacks': {
-        'signInSuccess': function () {
-          $state.go('login');
-          // Do something.
-          // Return type determines whether we continue the redirect automatically
-          // or whether we leave that to developer to handle.
-          return true;
+        'signInSuccess': function (currentUser, credential) {
+          var providerData = {};
+          Ref.child('users/' + currentUser.uid).once('value', function (snap) {
+            if (snap.val() === null) {
+              if (credential.provider === 'facebook.com') {
+                providerData = _.find(currentUser.providerData, { 'providerId': 'facebook.com' });
+                Ref.child('users/' + currentUser.uid).set({
+                  nome: providerData.displayName,
+                  fotoPerfil: providerData.photoURL,
+                  email: providerData.email
+                });
+              }
+              $state.go('wizard.intro');
+            }
+            else {
+              if (credential.provider === 'facebook.com') {
+                providerData = _.find(currentUser.providerData, { 'providerId': 'facebook.com' });
+                Ref.child('users/' + currentUser.uid).set({
+                  fotoPerfil: providerData.photoURL,
+                });
+              }
+              return true;
+            }
+          }, function (errorObject) {
+            console.log('The read failed: ' + errorObject.code);
+          });
         }
       }
     };
