@@ -1,9 +1,10 @@
 /*global _ moment firebase*/
 'use strict';
 angular.module('main')
-  .controller('ArenaDetailsCtrl', function ($scope, arena, quadras, ReservasService, $stateParams, $ionicModal) {
+  .controller('ArenaDetailsCtrl', function ($scope, arena, quadras, album, ReservasService, $stateParams, $ionicModal) {
     var vm = this;
     vm.arena = arena;
+    vm.album = album;
     vm.intervaloSelecionado = {};
     vm.horariosPorQuadra = [];
     vm.reservas = [];

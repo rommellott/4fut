@@ -1,3 +1,10 @@
+'use strict';
+angular.module('main')
+.service('Reservas', function ($log) {
+
+  $log.log('Hello from your Service: Reservas in module main');
+
+});
 /*global _ moment $q firebase*/
 'use strict';
 angular.module('main')
@@ -27,8 +34,24 @@ angular.module('main')
 
         if (horarioValido) {
           var reservaId = getRef().child(arena).push().key;
+          var jogoId = Ref.child('jogos').push().key;
+          var notificacaoId = Ref.child('arenasNotificacoes/' + arena).push().key;
           var reservaData = {};
-          reservaData['arenas/' + arena + '/contatos/' + firebase.auth().currentUser.uid] = true;
+          reservaData['arenasContatos/' + arena + '/' + firebase.auth().currentUser.uid] = true;
+          reservaData['users/' + firebase.auth().currentUser.uid + '/reservas/' + arena + '/' + reservaId ] = true;
+          reservaData['users/' + firebase.auth().currentUser.uid + '/jogos/' + jogoId ] = true;
+          reservaData['jogos/' + jogoId] = {
+            arena: arena,
+            responsavel: firebase.auth().currentUser.uid,
+            reserva: reservaId
+          };
+          reservaData['arenasNotificacoes/' + arena + '/' + notificacaoId] = {
+            data: new Date() / 1,
+            titulo: 'Nova Reserva de ' + firebase.auth().currentUser.displayName,
+            msg: moment(novaReserva.start).format('[dia] DD [as] HH:mm') + ' na - Quadra 1',
+            img: firebase.auth().currentUser.photoURL,
+            lida: false
+          };
           reservaData['reservas/' + arena + '/' + reservaId] = novaReserva;
 
           Ref.update(reservaData, function (error) {

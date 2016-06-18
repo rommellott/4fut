@@ -31,6 +31,10 @@ angular.module('main')
                   fotoPerfil: providerData.photoURL,
                   email: providerData.email
                 });
+                currentUser.updateProfile({
+                  displayName: providerData.displayName,
+                  photoURL: providerData.photoURL
+                });
               }
               $state.go('wizard.intro');
             }
@@ -39,6 +43,10 @@ angular.module('main')
                 providerData = _.find(currentUser.providerData, { 'providerId': 'facebook.com' });
                 Ref.child('users/' + currentUser.uid).set({
                   fotoPerfil: providerData.photoURL,
+                });
+                currentUser.updateProfile({
+                  displayName: providerData.displayName,
+                  photoURL: providerData.photoURL
                 });
               }
               return true;

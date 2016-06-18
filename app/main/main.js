@@ -145,6 +145,9 @@ angular.module('main', [
           }],
           quadras: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
             return ArenasService.getQuadrasArena($stateParams.id).$loaded();
+          }],
+          album: ['$stateParams', 'ArenasService', function ($stateParams, ArenasService) {
+            return ArenasService.getAlbum($stateParams.id).$loaded();
           }]
         }
       })
