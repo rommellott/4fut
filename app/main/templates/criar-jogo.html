@@ -1,0 +1,27 @@
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header bar-positive">
+    <h1 class="title">Criar Jogo</h1>
+    <button class="button button-clear button-primary ion-close-round" ng-click="vm.modalNovoJogo.hide()"></button>
+  </ion-header-bar>
+  <ion-content class="padding">
+    <div class="list">
+        <label class="item item-input">
+            <input type="text" ng-model="vm.novoJogo.nome" placeholder="Nome da Partida">
+        </label>
+        <label class="item item-input">
+            <!--<input type="text" ng-click="vm.openLocationModal()" ng-model="vm.novoJogo.endereco" placeholder="Local">-->
+            <input type="text" placeholder="Location" location-suggestion location="location" ng-model="location.formatted_address">
+        </label>
+        <a-carousel item-directive="carousel-text-item" carousel-options="::vm.dateSliderOptions" array-provider="::vm.dateSlider">
+        </a-carousel>
+        <rzslider rz-slider-model="vm.novoJogo.minJogadores" rz-slider-high="vm.novoJogo.maxJogadores" rz-slider-options="vm.jogadoresRange.options"></rzslider>
+
+    </div>
+    <button ng-click="vm.salvarJogo();" class="button button-block button-positive">
+      Criar Jogo
+    </button>
+    <!--<button ng-click="modal2.show();" class="button button-block button-positive">
+      Criar Jogo
+    </button>-->
+  </ion-content>
+</ion-modal-view>

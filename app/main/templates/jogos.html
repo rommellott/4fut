@@ -2,13 +2,21 @@
   <!-- do you want padding? -->
   <ion-content class="padding">
 
+    <button ng-click="vm.openNovoJogoModal();" class="button button-block button-positive">
+      Criar Jogo
+    </button>
     <!-- content goes here -->
+    <h1>Meus Jogos</h1>
     <ion-list>
-      <ion-item class="item item-divider">
-        This is your jogos template!
+      <ion-item class="item item-divider" ng-repeat="jogo in vm.meusJogos">
+        {{jogo | json}}
       </ion-item>
-      <ion-item class="item item-icon">
-        Yeiiii!
+    </ion-list>
+
+    <h1>Jogos por perto</h1>
+    <ion-list>
+      <ion-item class="item item-divider" ng-repeat="jogo in vm.jogosRegiao">
+        {{jogo | json}}
       </ion-item>
     </ion-list>
 

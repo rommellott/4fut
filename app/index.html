@@ -18,6 +18,7 @@
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/ionic-advanced-carousel/dist/advanced-carousel.min.css" />
+  <link rel="stylesheet" href="bower_components/angularjs-slider/dist/rzslider.css" />
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -31,7 +32,21 @@
   <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/ui/0.4.0/firebase-ui-auth.js"></script>
-
+  <script src="https://maps.google.com/maps/api/js?libraries=placeses,visualization,drawing,geometry,places">
+    jQuery("#my-autocomplete-element-id").focus(function (event) {
+        $timeout(function () {
+          jQuery(".pac-container").css("z-index", 10000);
+          jQuery('.pac-container').css('pointer-events', "auto");
+          jQuery('.pac-container').attr('data-tap-disabled', true);
+          if (isMobilePlatform()) {
+            jQuery('.pac-container').mouseover(function () {
+              var focusedElement = jQuery(':focus');
+              focusedElement.blur();
+            });
+          }
+        }, 500);
+      });
+  </script>
 </head>
 
 <body ng-app="fourfut">
@@ -70,6 +85,8 @@
   <script src="bower_components/angular-loader/angular-loader.js"></script>
   <script src="bower_components/angular-mocks/angular-mocks.js"></script>
   <script src="bower_components/ionic-wizard/dist/ion-wizard.js"></script>
+  <script src="bower_components/angularjs-slider/dist/rzslider.js"></script>
+  <script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
   
@@ -81,13 +98,16 @@
   <script src="main/services/user-serv.js"></script>
   <script src="main/services/reservas-serv.js"></script>
   <script src="main/services/main-serv.js"></script>
+  <script src="main/services/jogos-serv.js"></script>
   <script src="main/services/arenas-serv.js"></script>
+  <script src="main/directives/location-suggestion-dir.js"></script>
   <script src="main/directives/grouped-radio-dir.js"></script>
   <script src="main/controllers/startup-ctrl.js"></script>
   <script src="main/controllers/perfil-ctrl.js"></script>
   <script src="main/controllers/menu-ctrl.js"></script>
   <script src="main/controllers/login-ctrl.js"></script>
   <script src="main/controllers/jogos-ctrl.js"></script>
+  <script src="main/controllers/criar-jogo-ctrl.js"></script>
   <script src="main/controllers/arenas-ctrl.js"></script>
   <script src="main/controllers/arena-details-ctrl.js"></script>
   <script src="main/constants/config-const.js"></script>

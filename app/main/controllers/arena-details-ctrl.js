@@ -22,7 +22,7 @@ angular.module('main')
         selectFirst: true,
         centerOnSelect: false,
       };
-      vm.carouselData1 = createArray(20);
+      vm.carouselData1 = createArray();
       $ionicModal.fromTemplateUrl('/main/templates/confirma-reserva.html', {
         scope: $scope,
         animation: 'slide-in-up'

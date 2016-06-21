@@ -1,11 +1,4 @@
-'use strict';
-angular.module('main')
-.service('Reservas', function ($log) {
-
-  $log.log('Hello from your Service: Reservas in module main');
-
-});
-/*global _ moment $q firebase*/
+/*global _ moment firebase GeoFire*/
 'use strict';
 angular.module('main')
   .factory('ReservasService', function (Ref, $firebaseArray, $q) {
@@ -37,21 +30,24 @@ angular.module('main')
           var jogoId = Ref.child('jogos').push().key;
           var notificacaoId = Ref.child('arenasNotificacoes/' + arena).push().key;
           var reservaData = {};
-          reservaData['arenasContatos/' + arena + '/' + firebase.auth().currentUser.uid] = true;
-          reservaData['users/' + firebase.auth().currentUser.uid + '/reservas/' + arena + '/' + reservaId ] = true;
-          reservaData['users/' + firebase.auth().currentUser.uid + '/jogos/' + jogoId ] = true;
-          reservaData['jogos/' + jogoId] = {
-            arena: arena,
-            responsavel: firebase.auth().currentUser.uid,
-            reserva: reservaId
-          };
-          reservaData['arenasNotificacoes/' + arena + '/' + notificacaoId] = {
+          var notificacao = {
             data: new Date() / 1,
             titulo: 'Nova Reserva de ' + firebase.auth().currentUser.displayName,
             msg: moment(novaReserva.start).format('[dia] DD [as] HH:mm') + ' na - Quadra 1',
             img: firebase.auth().currentUser.photoURL,
             lida: false
           };
+          var jogo = {
+            arena: arena,
+            responsavel: firebase.auth().currentUser.uid,
+            reserva: reservaId,
+            status: 'agendado'
+          };
+          reservaData['arenasContatos/' + arena + '/' + firebase.auth().currentUser.uid] = true;
+          reservaData['arenasNotificacoes/' + arena + '/' + notificacaoId] = notificacao;
+          reservaData['usersReservas/' + firebase.auth().currentUser.uid + '/' + arena + '/' + reservaId] = true;
+          reservaData['usersJogos/' + firebase.auth().currentUser.uid + '/' + jogoId] = true;
+          reservaData['jogos/' + jogoId] = jogo;
           reservaData['reservas/' + arena + '/' + reservaId] = novaReserva;
 
           Ref.update(reservaData, function (error) {
@@ -59,6 +55,12 @@ angular.module('main')
               deferred.reject('Erro ao cadastrar nova turma');
             }
             else {
+              var ref = Ref.child('arenasLocalizacao/' + arena + '/l');
+              ref.once('value', function (data) {
+                var geo = new GeoFire(Ref.child('jogosLocalizacao'));
+                geo.set(jogoId, data.val());
+              });
+
               deferred.resolve();
             }
           });

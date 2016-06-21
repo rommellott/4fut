@@ -1,0 +1,69 @@
+<!--<ion-modal-view class="events-modal">
+    <ion-header-bar>
+        <div class="buttons">
+            <button class="button"
+                    ng-click="vm.closeLocationModal()">
+                <i class="icon ion-android-arrow-back"></i>
+            </button>
+        </div>
+        <h1 class="title">CHOOSE LOCATION</h1>
+    </ion-header-bar>
+    <ion-content data-tap-disabled="true">
+      
+    <div class="mapWrap">
+      
+      <ng-map id="gmap" 
+              zoom="{{ vm.mapEndSelection.zoom }}" 
+              center="{{ vm.mapEndSelection.center }}"
+              map-type-id="{{ vm.mapEndSelection.mapTypeId }}" 
+              pan-control="{{ vm.mapEndSelection.panControl }}" 
+              zoom-control="{{ vm.mapEndSelection.zoomControl }}"
+              scale-control="{{ vm.mapEndSelection.scaleControl }}" 
+              map-type-control="{{ vm.mapEndSelection.mapTypeControl }}" 
+              street-view-control="{{ vm.mapEndSelection.streetViewControl }}" 
+              default-style="{{ vm.mapEndSelection.defaultStyle }}">
+
+        <custom-control class="gmap-place-autocomplete-control-container" 
+                        index="30" 
+                        position="TOP_CENTER">
+
+          <input placeholder="Search for places" 
+                 types="{{ vm.types }}" 
+                 ng-model="vm.event.location" 
+                 on-place-changed="vm.placeChanged()" 
+                 places-auto-complete
+                 ng-focus="vm.disableTap($event)">
+
+        </custom-control>
+
+        <marker visible="{{ vm.showEventLocationMarker }}" 
+                centered="true" 
+                position="{{ vm.place.formatted_address }}" 
+                draggable="false"></marker>
+
+      </ng-map>
+    </div>
+        
+        
+    </ion-content>
+</ion-modal-view>-->
+
+<ion-modal-view>
+  <ion-header-bar class="item-input-inset">
+    <label class="item-input-wrapper">
+          <i class="icon ion-ios7-search placeholder-icon"></i>
+          <input type="search" ng-model="search.query" placeholder="Search">
+        </label>
+  </ion-header-bar>
+  <ion-content>
+    <ion-list>
+      <ion-item ng-show="search.error">
+        {{search.error}}
+      </ion-item>
+      <ion-item ng-repeat="suggestion in search.suggestions" ng-click="choosePlace(suggestion)">
+        {{suggestion.description}}
+      </ion-item>
+    </ion-list>
+    <img src="https://developers.google.com/maps/documentation/places/images/powered-by-google-on-white.png" alt="" />
+  </ion-content>
+</ion-modal-view>

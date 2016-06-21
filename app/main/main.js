@@ -11,7 +11,8 @@ angular.module('main', [
   'uiGmapgoogle-maps',
   'aCarousel',
   'tmh.dynamicLocale',
-  'ionic.wizard'
+  'ionic.wizard',
+  'rzModule'
   // TODO: load other modules selected during generation
 ])
 
@@ -122,15 +123,18 @@ angular.module('main', [
         controller: 'ApplicationController'
       })
 
+
+
       .state('tab.arenas', {
         url: '/arenas',
         views: {
           'tab.arenas': {
             templateUrl: 'main/templates/arenas-list.html',
-            controller: 'ArenasCtrl as actrl'
+            controller: 'ArenasCtrl as actrl',
           }
         }
       })
+
       .state('tab.arenas-detail', {
         url: '/arenas/:id',
         views: {
@@ -157,7 +161,7 @@ angular.module('main', [
         views: {
           'tab-jogos': {
             templateUrl: 'main/templates/jogos.html',
-            controller: 'JogosCtrl as jctr'
+            controller: 'JogosCtrl as vm'
           }
         }
       })

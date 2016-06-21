@@ -41,9 +41,9 @@ angular.module('main')
             else {
               if (credential.provider === 'facebook.com') {
                 providerData = _.find(currentUser.providerData, { 'providerId': 'facebook.com' });
-                Ref.child('users/' + currentUser.uid).set({
-                  fotoPerfil: providerData.photoURL,
-                });
+                var user = snap.val();
+                user.fotoPerfil = providerData.photoURL;
+                Ref.child('users/' + currentUser.uid).set(user);
                 currentUser.updateProfile({
                   displayName: providerData.displayName,
                   photoURL: providerData.photoURL
